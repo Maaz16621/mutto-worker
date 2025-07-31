@@ -1,0 +1,12 @@
+ ERROR  Warning: ReferenceError: Property 'CheckMark' doesn't exist
+
+This error is located at:
+
+Call Stack
+  Wrapper (<anonymous>)
+  ScreenContentWrapper (<anonymous>)
+  RNSScreenStack (<anonymous>)
+  RNCSafeAreaProvider (<anonymous>)
+  RNCSafeAreaProvider (<anonymous>)
+  App (<anonymous>)
+  ErrorOverlay (<anonymous>)

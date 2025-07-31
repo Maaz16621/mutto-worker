@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <style>
+    body { margin: 0; }
+    #mapid { height: 100vh; width: 100vw; }
+  </style>
+</head>
+<body>
+  <div id="mapid"></div>
+  <script>
+    var map = L.map('mapid').setView([0, 0], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var marker = L.marker([0, 0]).addTo(map);
+
+    function updateMap(latitude, longitude) {
+      console.log('Updating map to:', latitude, longitude);
+      map.setView([latitude, longitude], 13);
+      marker.setLatLng([latitude, longitude]);
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'mapUpdated', latitude: latitude, longitude: longitude }));
+    }
+
+    map.on('click', function(e) {
+      marker.setLatLng(e.latlng);
+      window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'mapClick', latitude: e.latlng.lat, longitude: e.latlng.lng }));
+    });
+
+    window.addEventListener('message', function(event) {
+      console.log('Message received in WebView:', event.data);
+      var data = JSON.parse(event.data);
+      if (data.type === 'setLocation') {
+        updateMap(data.latitude, data.longitude);
+      }
+    });
+  </script>
+</body>
+</html>
